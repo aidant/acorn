@@ -11,11 +11,13 @@ export default function Home() {
   })
 
   useEffect(() => {
-    if (!rcon) {
-      return
-    }
+    const interval = setInterval(() => {
+      rcon.list().then((value) => setOnlinePlayers(value))
+    }, 100)
 
-    rcon.list({}).then(setOnlinePlayers)
+    return () => {
+      clearInterval(interval)
+    }
   }, [rcon])
 
   return (

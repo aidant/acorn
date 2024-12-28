@@ -7,20 +7,20 @@ export const useServer = () => {
   return useQuery({
     queryKey: ['settings', 'server'],
     queryFn: async () => {
-      const [host, port, pass] = await Promise.all([
+      const [host, port, password] = await Promise.all([
         AsyncStorage.getItem('settings.server.host'),
         AsyncStorage.getItem('settings.server.port'),
-        getItemAsync('settings.server.pass'),
+        getItemAsync('settings.server.password'),
       ])
 
-      if (!host || !port || !pass) {
+      if (!host || !port || !password) {
         return
       }
 
       return {
         host: host,
         port: Number(port),
-        pass: pass,
+        password: password,
       }
     },
   })
@@ -28,11 +28,19 @@ export const useServer = () => {
 
 export const useServerMutation = () => {
   return useMutation({
-    mutationFn: async ({ host, port, pass }: { host: string; port: number; pass: string }) => {
+    mutationFn: async ({
+      host,
+      port,
+      password,
+    }: {
+      host: string
+      port: number
+      password: string
+    }) => {
       await Promise.all([
         AsyncStorage.setItem('settings.server.host', host),
         AsyncStorage.setItem('settings.server.port', String(port)),
-        setItemAsync('settings.server.pass', pass),
+        setItemAsync('settings.server.password', password),
       ])
     },
     onSuccess: () => {

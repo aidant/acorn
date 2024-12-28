@@ -5,10 +5,7 @@
     "strict": true,
     "paths": {
       "@/*": ["./*"],
-      "@lazy/rcon/byo-transport-net": [
-        "./node_modules/@lazy/rcon/dist/byo-transport-net"
-      ],
-      "@lazy/rcon/minecraft": ["./node_modules/@lazy/rcon/dist/minecraft"]
+      "@lazy/rcon": ["./node_modules/@lazy/rcon/dist/mod"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]

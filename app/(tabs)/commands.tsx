@@ -1,6 +1,5 @@
 import { useRcon } from '@/hooks/rcon'
-import type { Command } from '@lazy/rcon/dist/create-game-client'
-import { commands } from '@lazy/rcon/minecraft'
+import { minecraft, type Command } from '@lazy/rcon'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Button, Text, TextInput, View } from 'react-native'
@@ -20,7 +19,7 @@ export function Command({ commandId, command }: { commandId: string; command: Co
   })
 
   const onSubmit = (data: unknown) => {
-    rcon?.[commandId as keyof typeof rcon](data as any).then(setState)
+    rcon?.[commandId as keyof typeof rcon](data as any)?.then(setState)
   }
 
   return (
@@ -46,7 +45,22 @@ export function Command({ commandId, command }: { commandId: string; command: Co
           </View>
         )
       })}
-      <Text>{JSON.stringify(state)}</Text>
+      {Object.entries(state).map(([name, value]) => {
+        return (
+          <View key={name} style={{ display: 'flex' }}>
+            <Text>{name}</Text>
+            {Array.isArray(value) ? (
+              <View>
+                {value.map((value, index) => {
+                  return <Text key={index}>{value}</Text>
+                })}
+              </View>
+            ) : (
+              <Text>{String(value)}</Text>
+            )}
+          </View>
+        )
+      })}
       <View>
         <Button title='Run' onPress={handleSubmit((data) => onSubmit(data))} />
       </View>
@@ -57,7 +71,7 @@ export function Command({ commandId, command }: { commandId: string; command: Co
 export default function Commands() {
   return (
     <View>
-      {Object.entries(commands).map(([commandId, command]) => {
+      {Object.entries(minecraft).map(([commandId, command]) => {
         return <Command commandId={commandId} command={command} key={commandId}></Command>
       })}
     </View>

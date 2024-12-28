@@ -4,10 +4,10 @@ import { Controller, useForm } from 'react-hook-form'
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
 
 export default function Settings() {
-  const { data } = useServer()
+  const { data, isLoading } = useServer()
   const { mutate: onSubmit } = useServerMutation()
 
-  if (data) {
+  if (!isLoading) {
     return <Form data={data} onSubmit={onSubmit}></Form>
   }
 }
@@ -16,8 +16,8 @@ export function Form({
   data,
   onSubmit,
 }: {
-  data: { host: string; port: number; pass: string }
-  onSubmit: (data: { host: string; port: number; pass: string }) => void
+  data?: { host: string; port: number; password: string }
+  onSubmit: (data: { host: string; port: number; password: string }) => void
 }) {
   const {
     handleSubmit,
@@ -25,9 +25,9 @@ export function Form({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      host: data.host,
-      port: String(data.port),
-      pass: data.pass,
+      host: data?.host,
+      port: typeof data?.port === 'number' ? String(data.port) : '',
+      password: data?.password,
     },
   })
 
@@ -91,17 +91,17 @@ export function Form({
               value={value}
             />
           )}
-          name='pass'
+          name='password'
           rules={{ required: true }}
         ></Controller>
-        {errors.pass && <Text>{'Password is required'}</Text>}
+        {errors.password && <Text>{'Password is required'}</Text>}
       </View>
 
       <View style={styles.container}>
         <Button
           title='Save'
           onPress={handleSubmit((data) =>
-            onSubmit({ host: data.host, port: Number(data.port), pass: data.pass }),
+            onSubmit({ host: data.host, port: Number(data.port), password: data.password }),
           )}
         />
       </View>
