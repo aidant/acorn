@@ -4,9 +4,19 @@
     "allowImportingTsExtensions": true,
     "strict": true,
     "paths": {
-      "@/*": ["./*"],
-      "@lazy/rcon": ["./node_modules/@lazy/rcon/dist/mod"]
+      "@/*": [
+        "./*"
+      ],
+      "@lazy/rcon": [
+        "./node_modules/@lazy/rcon/dist/mod"
+      ]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
+  ]
 }

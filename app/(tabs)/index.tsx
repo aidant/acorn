@@ -12,8 +12,11 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      rcon.list().then((value) => setOnlinePlayers(value))
-    }, 100)
+      rcon.list().then((value) => {
+        console.log(value)
+        setOnlinePlayers(value)
+      })
+    }, 1000)
 
     return () => {
       clearInterval(interval)
@@ -28,11 +31,13 @@ export default function Home() {
         alignItems: 'center',
       }}
     >
-      <Text>
+      <Text className='dark:text-white text-black'>
         There are {onlinePlayers.count} of a max of {onlinePlayers.max} players online:
       </Text>
       {onlinePlayers.players.map((player) => (
-        <Text key={player}>{player}</Text>
+        <Text className='dark:text-white text-black' key={player}>
+          {player}
+        </Text>
       ))}
     </View>
   )
