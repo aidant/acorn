@@ -2,7 +2,7 @@ import { createRconClient as _createRconClient, minecraft } from '@lazy/rcon'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, type ReactElement } from 'react'
 import TcpSocket from 'react-native-tcp-socket'
-import { useServer } from './settings'
+import { useServerHost, useServerPassword, useServerPort } from './store'
 
 export const queryClient = new QueryClient()
 
@@ -19,13 +19,16 @@ export const createRconClient = () => {
 }
 
 export const useRcon = () => {
-  const { data: options } = useServer()
+  const host = useServerHost()
+  const port = useServerPort()
+  const password = useServerPassword()
+
   const rcon = createRconClient()
 
   useEffect(() => {
-    rcon.$configure(options)
+    rcon.$configure({ host, port, password })
     rcon.$disconnect()
-  }, [options])
+  }, [host, port, password])
 
   return rcon
 }
