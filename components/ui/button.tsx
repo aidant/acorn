@@ -18,3 +18,21 @@ export const Button = (props: { className?: string; children: string; onPress: (
     </TouchableHighlight>
   )
 }
+
+export const ButtonSmall = (props: {
+  className?: string
+  children: string
+  onPress: () => void
+}) => {
+  return (
+    <TouchableHighlight
+      className={twMerge('px-3 py-1 rounded-full border border-stone-700', props.className)}
+      underlayColor='#44403c'
+      onPress={props.onPress}
+    >
+      <View>
+        <Text className='text-white text-center'>{props.children}</Text>
+      </View>
+    </TouchableHighlight>
+  )
+}

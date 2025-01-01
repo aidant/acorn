@@ -106,9 +106,9 @@ const ServerOverviewList = () => {
 
 export const ServerOverview = () => {
   return (
-    <>
+    <View className='w-full'>
       <ServerOverviewStats />
       <ServerOverviewList />
-    </>
+    </View>
   )
 }

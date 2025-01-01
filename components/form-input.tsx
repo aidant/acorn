@@ -30,7 +30,7 @@ export function FormInput<
         )}
         name={props.name}
         rules={props.rules}
-      ></Controller>
+      />
       {props.error && <Text>{props.error}</Text>}
     </View>
   )

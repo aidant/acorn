@@ -12,6 +12,7 @@ import { SplashScreen, Stack } from 'expo-router'
 import { useColorScheme } from 'nativewind'
 import { useEffect } from 'react'
 import React, { StatusBar } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import './global.css'
 
 const CustomLightTheme = {
@@ -65,29 +66,33 @@ export default function RootLayout() {
         backgroundColor={theme.colors.background}
       />
 
-      <ThemeProvider value={theme}>
-        <QueryProvider>
-          <Stack>
-            <Stack.Screen name='index' options={{ title: 'Dashboard', headerShown: false }} />
-            <Stack.Screen
-              name='commands'
-              options={{ title: 'Commands', headerTransparent: true }}
-            />
-            <Stack.Screen
-              name='server-settings'
-              options={{
-                title: 'Server settings',
-                headerTitleAlign: 'center',
-                headerStyle: {
-                  backgroundColor: theme.colors.background,
-                },
-                headerShadowVisible: false,
-                headerBackButtonDisplayMode: 'minimal',
-              }}
-            />
-          </Stack>
-        </QueryProvider>
-      </ThemeProvider>
+      <SafeAreaProvider>
+        <SafeAreaView className='flex-1' edges={['top']}>
+          <ThemeProvider value={theme}>
+            <QueryProvider>
+              <Stack>
+                <Stack.Screen name='index' options={{ title: 'Dashboard', headerShown: false }} />
+                <Stack.Screen
+                  name='commands'
+                  options={{ title: 'Commands', headerTransparent: true }}
+                />
+                <Stack.Screen
+                  name='server-settings'
+                  options={{
+                    title: 'Server settings',
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                      backgroundColor: theme.colors.background,
+                    },
+                    headerShadowVisible: false,
+                    headerBackButtonDisplayMode: 'minimal',
+                  }}
+                />
+              </Stack>
+            </QueryProvider>
+          </ThemeProvider>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </>
   )
 }
