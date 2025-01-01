@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  font-size: 16px;
+}
+
+.font-sans {
+  font-family: 'AtkinsonHyperlegible_400Regular';
+}
+
+.font-sans.font-bold {
+  font-family: 'AtkinsonHyperlegible_700Bold';
+}

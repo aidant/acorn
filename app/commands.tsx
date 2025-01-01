@@ -30,11 +30,11 @@ export function Command({ commandId, command }: { commandId: string; command: Co
 
   return (
     <View>
-      <Text className='dark:text-white text-black'>{commandId}</Text>
+      <Text>{commandId}</Text>
       {Object.entries(command.request.params || {}).map(([paramName, definition]) => {
         return (
           <View key={paramName}>
-            <Text className='dark:text-white text-black'>{paramName}</Text>
+            <Text>{paramName}</Text>
             <Controller
               control={control}
               name={paramName}
@@ -48,28 +48,22 @@ export function Command({ commandId, command }: { commandId: string; command: Co
               )}
               rules={{ required: true }}
             />
-            {errors[paramName] && (
-              <Text className='dark:text-white text-black'>{paramName} is required</Text>
-            )}
+            {errors[paramName] && <Text>{paramName} is required</Text>}
           </View>
         )
       })}
       {Object.entries(state).map(([name, value]) => {
         return (
           <View key={name} style={{ display: 'flex' }}>
-            <Text className='dark:text-white text-black'>{name}</Text>
+            <Text>{name}</Text>
             {Array.isArray(value) ? (
               <View>
                 {value.map((value, index) => {
-                  return (
-                    <Text className='dark:text-white text-black' key={index}>
-                      {value}
-                    </Text>
-                  )
+                  return <Text key={index}>{value}</Text>
                 })}
               </View>
             ) : (
-              <Text className='dark:text-white text-black'>{String(value)}</Text>
+              <Text>{String(value)}</Text>
             )}
           </View>
         )

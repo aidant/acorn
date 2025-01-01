@@ -1,5 +1,12 @@
-import { RconProvider } from '@/hooks/rcon'
+import { QueryProvider } from '@/hooks/rcon'
 import { useServerStorePersistence } from '@/hooks/store'
+import {
+  AtkinsonHyperlegible_400Regular,
+  AtkinsonHyperlegible_400Regular_Italic,
+  AtkinsonHyperlegible_700Bold,
+  AtkinsonHyperlegible_700Bold_Italic,
+  useFonts,
+} from '@expo-google-fonts/atkinson-hyperlegible'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { SplashScreen, Stack } from 'expo-router'
 import { useColorScheme } from 'nativewind'
@@ -31,13 +38,21 @@ export default function RootLayout() {
   setColorScheme('dark')
 
   const { isLoading } = useServerStorePersistence()
+
+  let [hasAtkinsonHyperlegibleLoaded] = useFonts({
+    AtkinsonHyperlegible_400Regular,
+    AtkinsonHyperlegible_400Regular_Italic,
+    AtkinsonHyperlegible_700Bold,
+    AtkinsonHyperlegible_700Bold_Italic,
+  })
+
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && hasAtkinsonHyperlegibleLoaded) {
       SplashScreen.hideAsync()
     }
-  }, [isLoading])
+  }, [isLoading, hasAtkinsonHyperlegibleLoaded])
 
-  if (isLoading) {
+  if (isLoading && !hasAtkinsonHyperlegibleLoaded) {
     return null
   }
 
@@ -47,10 +62,11 @@ export default function RootLayout() {
     <>
       <StatusBar
         barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
-        backgroundColor={colorScheme === 'dark' ? '#000000' : '#ffffff'}
-      ></StatusBar>
+        backgroundColor={theme.colors.background}
+      />
+
       <ThemeProvider value={theme}>
-        <RconProvider>
+        <QueryProvider>
           <Stack>
             <Stack.Screen name='index' options={{ title: 'Dashboard', headerShown: false }} />
             <Stack.Screen
@@ -70,7 +86,7 @@ export default function RootLayout() {
               }}
             />
           </Stack>
-        </RconProvider>
+        </QueryProvider>
       </ThemeProvider>
     </>
   )

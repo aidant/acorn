@@ -6,7 +6,7 @@ export const Container = ({ className, children }: { className?: string; childre
   return (
     <View
       className={twMerge(
-        'px-3 py-2 border-2 dark:border-stone-700 dark:bg-stone-800 bg-stone-100 border-stone-200 rounded-md',
+        'px-3 py-2 border dark:border-stone-700 dark:bg-stone-900 bg-stone-100 border-stone-200 rounded-xl',
         className,
       )}
     >

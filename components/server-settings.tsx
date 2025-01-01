@@ -41,7 +41,7 @@ export function ServerSettings(props: Server & { onSubmit: (server: Server) => v
         />
 
         <FormInput
-          className='w-auto'
+          className='w-auto min-w-24'
           type='number'
           name='port'
           label='Port'

@@ -1,6 +1,7 @@
 import { Input, type InputType } from '@/components/ui/input'
+import { Text } from '@/components/ui/text'
 import { Controller, type ControllerProps, type FieldPath, type FieldValues } from 'react-hook-form'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { twMerge } from 'tailwind-merge'
 
 export function FormInput<
@@ -16,7 +17,7 @@ export function FormInput<
 ) {
   return (
     <View className={twMerge('flex flex-col gap-1 w-full', props.className)}>
-      <Text className='dark:text-white text-black'>{props.label}</Text>
+      <Text>{props.label}</Text>
       <Controller
         control={props.control}
         render={({ field: { onChange, onBlur, value } }) => (
@@ -30,7 +31,7 @@ export function FormInput<
         name={props.name}
         rules={props.rules}
       ></Controller>
-      {props.error && <Text className='dark:text-white text-black'>{props.error}</Text>}
+      {props.error && <Text>{props.error}</Text>}
     </View>
   )
 }
