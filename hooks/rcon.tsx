@@ -41,14 +41,16 @@ export const useRcon = () => {
 
 export const useRconStats = () => {
   const rcon = useContext(RconContext)
-  const [isConnected, setIsConnected] = useState(rcon.$isConnected())
-  const [timestamp, setTimestamp] = useState(new Date())
+  const [stats, setStats] = useState(rcon.$stats())
 
   useEffect(() => {
-    const unsubscribe = rcon.$observeIsConnected((_isConnected) => {
-      if (isConnected !== _isConnected) {
-        setIsConnected(_isConnected)
-        setTimestamp(new Date())
+    const unsubscribe = rcon.$observeStats((_stats) => {
+      if (
+        stats.isConnected !== _stats.isConnected ||
+        stats.lastResponseLatencyInMs !== _stats.lastResponseLatencyInMs ||
+        stats.lastResponseTimestampInMs !== _stats.lastResponseTimestampInMs
+      ) {
+        setStats(_stats)
       }
     })
 
@@ -57,5 +59,5 @@ export const useRconStats = () => {
     }
   }, [])
 
-  return { isConnected, timestamp }
+  return stats
 }

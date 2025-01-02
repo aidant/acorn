@@ -2,8 +2,7 @@ import { Container } from '@/components/ui/container'
 import { Indicator } from '@/components/ui/indicator'
 import { Text } from '@/components/ui/text'
 import { useRcon, useRconStats } from '@/hooks/rcon'
-import { useServerName } from '@/hooks/store'
-import { useTimeRelative } from '@/hooks/time-relative'
+import { useServerHost, useServerName, useServerPort } from '@/hooks/store'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import * as React from 'react'
@@ -12,8 +11,9 @@ import { View } from 'react-native'
 
 const ServerOverviewStats = () => {
   const serverName = useServerName()
+  const serverHost = useServerHost()
+  const serverPort = useServerPort()
   const stats = useRconStats()
-  const relative = useTimeRelative(stats.timestamp)
 
   return (
     <Container className='px-6 py-4 rounded-b-none'>
@@ -28,7 +28,7 @@ const ServerOverviewStats = () => {
             numberOfLines={1}
             ellipsizeMode='tail'
           >
-            {stats.isConnected ? 'Connected' : 'Disconnected'} for {relative}
+            {stats.isConnected ? 'Connected to' : 'Disconnected from'} {serverHost}:{serverPort}
           </Text>
         </View>
 
@@ -47,6 +47,7 @@ const ServerOverviewStats = () => {
 
 const ServerOverviewList = () => {
   const rcon = useRcon()
+  const stats = useRconStats()
 
   const { data, refetch } = useQuery({
     queryKey: ['rcon', 'minecraft', 'list'],
@@ -67,20 +68,47 @@ const ServerOverviewList = () => {
   return (
     <>
       <View className='flex flex-row w-full'>
-        <Container className='px-6 py-4 border-t-0 rounded-none flex-grow gap-1'>
-          <Text className='dark:text-stone-300'>Player count</Text>
+        <Container className='px-6 py-4 border-t-0 rounded-none flex-grow gap-1 flex-shrink'>
+          <Text className='dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
+            Online
+          </Text>
           {!data ? (
             <Text className='dark:text-stone-400 text-stone-400 text-lg'>Unknown</Text>
           ) : (
-            <Text className='text-lg'>{data.count}</Text>
+            <View className='flex flex-row items-baseline gap-1'>
+              <Text className='text-lg'>{data.count}</Text>
+              <Text className='text-sm dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
+                players
+              </Text>
+            </View>
           )}
         </Container>
-        <Container className='px-6 py-4 border-t-0 rounded-none border-l-0 flex-grow gap-1'>
-          <Text className='dark:text-stone-300'>Player limit</Text>
+        <Container className='px-6 py-4 border-t-0 rounded-none border-l-0 flex-grow gap-1 flex-shrink'>
+          <Text className='dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
+            Limit
+          </Text>
           {!data ? (
             <Text className='dark:text-stone-400 text-stone-400 text-lg'>Unknown</Text>
           ) : (
-            <Text className='text-lg'>{data.max}</Text>
+            <View className='flex flex-row items-baseline gap-1'>
+              <Text className='text-lg'>{data.max}</Text>
+              <Text className='text-sm dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
+                players
+              </Text>
+            </View>
+          )}
+        </Container>
+        <Container className='px-6 py-4 border-t-0 rounded-none border-l-0 flex-grow gap-1 flex-shrink'>
+          <Text className='dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
+            Latency
+          </Text>
+          {stats.lastResponseLatencyInMs === undefined ? (
+            <Text className='dark:text-stone-400 text-stone-400 text-lg'>Unknown</Text>
+          ) : (
+            <View className='flex flex-row items-baseline gap-1'>
+              <Text className='text-lg'>{stats.lastResponseLatencyInMs}</Text>
+              <Text className='text-sm dark:text-stone-300'>ms</Text>
+            </View>
           )}
         </Container>
       </View>
