@@ -35,8 +35,7 @@ const CustomDarkTheme = {
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const { colorScheme, setColorScheme } = useColorScheme()
-  setColorScheme('system')
+  const { colorScheme } = useColorScheme()
 
   const { isLoading } = useServerStorePersistence()
 

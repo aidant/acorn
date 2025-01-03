@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rcon-mobile",
-    "slug": "rcon-mobile",
+    "name": "acorn",
+    "slug": "acorn",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,14 +10,14 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.rconmobile"
+      "bundleIdentifier": "pro.aidan.acorn"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1c1917"
       },
-      "package": "com.anonymous.rconmobile"
+      "package": "pro.aidan.acorn"
     },
     "web": {
       "bundler": "metro",
@@ -32,7 +32,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#1c1917"
         }
       ],
       "expo-secure-store",
