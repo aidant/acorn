@@ -1,4 +1,4 @@
-import { QueryProvider } from '@/hooks/rcon'
+import { useRconImpl } from '@/hooks/rcon'
 import { useServerStorePersistence } from '@/hooks/store-server'
 import {
   AtkinsonHyperlegible_400Regular,
@@ -53,6 +53,8 @@ export default function RootLayout() {
     }
   }, [isLoading, hasAtkinsonHyperlegibleLoaded])
 
+  useRconImpl()
+
   if (isLoading && !hasAtkinsonHyperlegibleLoaded) {
     return null
   }
@@ -69,27 +71,21 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <SafeAreaView className='flex-1' edges={['top']}>
           <ThemeProvider value={theme}>
-            <QueryProvider>
-              <Stack>
-                <Stack.Screen name='index' options={{ title: 'Dashboard', headerShown: false }} />
-                <Stack.Screen
-                  name='commands'
-                  options={{ title: 'Commands', headerTransparent: true }}
-                />
-                <Stack.Screen
-                  name='server-settings'
-                  options={{
-                    title: 'Server settings',
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                      backgroundColor: theme.colors.background,
-                    },
-                    headerShadowVisible: false,
-                    headerBackButtonDisplayMode: 'minimal',
-                  }}
-                />
-              </Stack>
-            </QueryProvider>
+            <Stack>
+              <Stack.Screen name='index' options={{ title: 'Dashboard', headerShown: false }} />
+              <Stack.Screen
+                name='server-settings'
+                options={{
+                  title: 'Server settings',
+                  headerTitleAlign: 'center',
+                  headerStyle: {
+                    backgroundColor: theme.colors.background,
+                  },
+                  headerShadowVisible: false,
+                  headerBackButtonDisplayMode: 'minimal',
+                }}
+              />
+            </Stack>
           </ThemeProvider>
         </SafeAreaView>
       </SafeAreaProvider>

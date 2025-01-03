@@ -1,26 +1,24 @@
 import { Container } from '@/components/ui/container'
 import { Indicator } from '@/components/ui/indicator'
 import { Text } from '@/components/ui/text'
-import { useRcon, useRconStats } from '@/hooks/rcon'
+import { useOverview, useOverviewIsConnected } from '@/hooks/store-overview'
 import { useServerHost, useServerName, useServerPort } from '@/hooks/store-server'
-import { useQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import * as React from 'react'
-import { useEffect } from 'react'
 import { View } from 'react-native'
 
 const ServerOverviewStats = () => {
   const serverName = useServerName()
   const serverHost = useServerHost()
   const serverPort = useServerPort()
-  const stats = useRconStats()
+  const isConnected = useOverviewIsConnected()
 
   return (
     <Container className='px-6 py-4 rounded-b-none'>
       <View className='flex flex-row gap-2 justify-between items-center'>
         <View className='flex flex-col gap-2 flex-shrink'>
           <View className='flex flex-row gap-2 items-center'>
-            <Indicator enabled={stats.isConnected} />
+            <Indicator enabled={isConnected} />
             <Text className='flex-shrink text-lg'>{serverName}</Text>
           </View>
           <Text
@@ -28,7 +26,7 @@ const ServerOverviewStats = () => {
             numberOfLines={1}
             ellipsizeMode='tail'
           >
-            {stats.isConnected ? 'Connected to' : 'Disconnected from'} {serverHost}:{serverPort}
+            {isConnected ? 'Connected to' : 'Disconnected from'} {serverHost}:{serverPort}
           </Text>
         </View>
 
@@ -46,24 +44,7 @@ const ServerOverviewStats = () => {
 }
 
 const ServerOverviewList = () => {
-  const rcon = useRcon()
-  const stats = useRconStats()
-
-  const { data, refetch } = useQuery({
-    queryKey: ['rcon', 'minecraft', 'list'],
-    queryFn: async () => {
-      return rcon.list()
-    },
-  })
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refetch()
-    }, 5000)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [refetch])
+  const overview = useOverview()
 
   return (
     <>
@@ -72,7 +53,7 @@ const ServerOverviewList = () => {
           <Text className='dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
             Online
           </Text>
-          {!data ? (
+          {overview.playersOnline === undefined ? (
             <Text
               className='dark:text-stone-400 text-stone-400 text-lg'
               numberOfLines={1}
@@ -82,9 +63,13 @@ const ServerOverviewList = () => {
             </Text>
           ) : (
             <View className='flex flex-row items-baseline gap-1'>
-              <Text className='text-lg '>{data.count}</Text>
-              <Text className='text-sm dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
-                {data.count === 1 ? 'player' : 'players'}
+              <Text className='text-lg '>{overview.playersOnline}</Text>
+              <Text
+                className='text-sm dark:text-stone-400 text-stone-400'
+                numberOfLines={1}
+                ellipsizeMode='tail'
+              >
+                {overview.playersOnline === 1 ? 'player' : 'players'}
               </Text>
             </View>
           )}
@@ -93,7 +78,7 @@ const ServerOverviewList = () => {
           <Text className='dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
             Limit
           </Text>
-          {!data ? (
+          {overview.playersLimit === undefined ? (
             <Text
               className='dark:text-stone-400 text-stone-400 text-lg'
               numberOfLines={1}
@@ -103,9 +88,13 @@ const ServerOverviewList = () => {
             </Text>
           ) : (
             <View className='flex flex-row items-baseline gap-1'>
-              <Text className='text-lg '>{data.max}</Text>
-              <Text className='text-sm dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
-                {data.max === 1 ? 'player' : 'players'}
+              <Text className='text-lg '>{overview.playersLimit}</Text>
+              <Text
+                className='text-sm dark:text-stone-400 text-stone-400'
+                numberOfLines={1}
+                ellipsizeMode='tail'
+              >
+                {overview.playersLimit === 1 ? 'player' : 'players'}
               </Text>
             </View>
           )}
@@ -114,7 +103,7 @@ const ServerOverviewList = () => {
           <Text className='dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
             Latency
           </Text>
-          {stats.lastResponseLatencyInMs === undefined ? (
+          {overview.latency === undefined ? (
             <Text
               className='dark:text-stone-400 text-stone-400 text-lg'
               numberOfLines={1}
@@ -124,8 +113,8 @@ const ServerOverviewList = () => {
             </Text>
           ) : (
             <View className='flex flex-row items-baseline gap-1'>
-              <Text className='text-lg '>{stats.lastResponseLatencyInMs}</Text>
-              <Text className='text-sm dark:text-stone-300'>ms</Text>
+              <Text className='text-lg '>{overview.latency}</Text>
+              <Text className='text-sm dark:text-stone-400 text-stone-400'>ms</Text>
             </View>
           )}
         </Container>
@@ -133,7 +122,7 @@ const ServerOverviewList = () => {
       <Container className='px-6 py-4 border-t-0 rounded-t-none gap-1'>
         <Text className='dark:text-stone-300'>Players</Text>
         <View className='flex flex-row flex-wrap gap-4'>
-          {!data?.players.length ? (
+          {overview.players === undefined ? (
             <Text
               className='dark:text-stone-400 text-stone-400 text-lg'
               numberOfLines={1}
@@ -141,8 +130,10 @@ const ServerOverviewList = () => {
             >
               Unknown
             </Text>
+          ) : overview.players.length === 0 ? (
+            <Text className='text-lg dark:text-stone-400 text-stone-400'>None</Text>
           ) : (
-            data?.players.map((player) => {
+            overview.players.map((player) => {
               return (
                 <Text key={player} className='text-lg'>
                   {player}
