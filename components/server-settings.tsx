@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { type Server } from '@/hooks/store'
+import { type Server } from '@/hooks/store-server'
 import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
 import { FormInput } from './form-input'

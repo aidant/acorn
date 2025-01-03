@@ -2,7 +2,7 @@ import { Container } from '@/components/ui/container'
 import { Indicator } from '@/components/ui/indicator'
 import { Text } from '@/components/ui/text'
 import { useRcon, useRconStats } from '@/hooks/rcon'
-import { useServerHost, useServerName, useServerPort } from '@/hooks/store'
+import { useServerHost, useServerName, useServerPort } from '@/hooks/store-server'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import * as React from 'react'
@@ -73,12 +73,18 @@ const ServerOverviewList = () => {
             Online
           </Text>
           {!data ? (
-            <Text className='dark:text-stone-400 text-stone-400 text-lg'>Unknown</Text>
+            <Text
+              className='dark:text-stone-400 text-stone-400 text-lg'
+              numberOfLines={1}
+              ellipsizeMode='tail'
+            >
+              Unknown
+            </Text>
           ) : (
             <View className='flex flex-row items-baseline gap-1'>
-              <Text className='text-lg'>{data.count}</Text>
+              <Text className='text-lg '>{data.count}</Text>
               <Text className='text-sm dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
-                players
+                {data.count === 1 ? 'player' : 'players'}
               </Text>
             </View>
           )}
@@ -88,12 +94,18 @@ const ServerOverviewList = () => {
             Limit
           </Text>
           {!data ? (
-            <Text className='dark:text-stone-400 text-stone-400 text-lg'>Unknown</Text>
+            <Text
+              className='dark:text-stone-400 text-stone-400 text-lg'
+              numberOfLines={1}
+              ellipsizeMode='tail'
+            >
+              Unknown
+            </Text>
           ) : (
             <View className='flex flex-row items-baseline gap-1'>
-              <Text className='text-lg'>{data.max}</Text>
+              <Text className='text-lg '>{data.max}</Text>
               <Text className='text-sm dark:text-stone-300' numberOfLines={1} ellipsizeMode='tail'>
-                players
+                {data.max === 1 ? 'player' : 'players'}
               </Text>
             </View>
           )}
@@ -103,10 +115,16 @@ const ServerOverviewList = () => {
             Latency
           </Text>
           {stats.lastResponseLatencyInMs === undefined ? (
-            <Text className='dark:text-stone-400 text-stone-400 text-lg'>Unknown</Text>
+            <Text
+              className='dark:text-stone-400 text-stone-400 text-lg'
+              numberOfLines={1}
+              ellipsizeMode='tail'
+            >
+              Unknown
+            </Text>
           ) : (
             <View className='flex flex-row items-baseline gap-1'>
-              <Text className='text-lg'>{stats.lastResponseLatencyInMs}</Text>
+              <Text className='text-lg '>{stats.lastResponseLatencyInMs}</Text>
               <Text className='text-sm dark:text-stone-300'>ms</Text>
             </View>
           )}
@@ -116,7 +134,13 @@ const ServerOverviewList = () => {
         <Text className='dark:text-stone-300'>Players</Text>
         <View className='flex flex-row flex-wrap gap-4'>
           {!data?.players.length ? (
-            <Text className='dark:text-stone-400 text-stone-400 text-lg'>Unknown</Text>
+            <Text
+              className='dark:text-stone-400 text-stone-400 text-lg'
+              numberOfLines={1}
+              ellipsizeMode='tail'
+            >
+              Unknown
+            </Text>
           ) : (
             data?.players.map((player) => {
               return (

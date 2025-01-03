@@ -1,5 +1,5 @@
 import { QueryProvider } from '@/hooks/rcon'
-import { useServerStorePersistence } from '@/hooks/store'
+import { useServerStorePersistence } from '@/hooks/store-server'
 import {
   AtkinsonHyperlegible_400Regular,
   AtkinsonHyperlegible_400Regular_Italic,
@@ -36,7 +36,7 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const { colorScheme, setColorScheme } = useColorScheme()
-  setColorScheme('dark')
+  setColorScheme('system')
 
   const { isLoading } = useServerStorePersistence()
 

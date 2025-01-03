@@ -5,7 +5,7 @@ import {
   useServerName,
   useServerPassword,
   useServerPort,
-} from '@/hooks/store'
+} from '@/hooks/store-server'
 import { router } from 'expo-router'
 
 export default function ServerSettingsPage() {
