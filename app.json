@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "acorn",
+    "name": "Acorn",
     "slug": "acorn",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "acorn",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

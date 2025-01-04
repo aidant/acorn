@@ -121,7 +121,7 @@ const ServerOverviewList = () => {
       </View>
       <Container className='px-6 py-4 border-t-0 rounded-t-none gap-1'>
         <Text className='dark:text-stone-300'>Players</Text>
-        <View className='flex flex-row flex-wrap gap-4'>
+        <View className='flex flex-row flex-wrap gap-2'>
           {overview.players === undefined ? (
             <Text
               className='dark:text-stone-400 text-stone-400 text-lg'
