@@ -15,7 +15,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#1c1917"
+        "backgroundColor": "#ffffff"
       },
       "package": "pro.aidan.acorn"
     },
