@@ -1,5 +1,5 @@
 import { createRconClient, minecraft } from '@lazy/rcon'
-import { useEffect, useRef } from 'react'
+import { type ReactNode, useEffect, useRef } from 'react'
 import TcpSocket from 'react-native-tcp-socket'
 import { handleOverviewList, handleOverviewStats, handleOverviewWhitelist } from './store-overview'
 import { useServerHost, useServerPassword, useServerPort } from './store-server'
@@ -14,7 +14,8 @@ export const useRconImpl = () => {
   const host = useServerHost()
   const port = useServerPort()
   const password = useServerPassword()
-  const ref = useRef(Promise.resolve())
+  const promise = useRef(Promise.resolve())
+  const controller = useRef(new AbortController())
 
   useEffect(() => {
     rcon.$configure({ host, port, password })
@@ -31,20 +32,43 @@ export const useRconImpl = () => {
 
   useEffect(() => {
     const impl = () => {
-      ref.current = ref.current
-        .finally(() => rcon.list().then(handleOverviewList))
-        .finally(() => rcon.whitelist().then(handleOverviewWhitelist))
+      promise.current = promise.current.then(() => {
+        return Promise.race([
+          new Promise<never>((_resolve, reject) => {
+            const handleAbort = () => {
+              controller.current.signal.removeEventListener('abort', handleAbort)
+
+              reject()
+            }
+
+            controller.current.signal.addEventListener('abort', handleAbort)
+          }),
+          Promise.resolve()
+            .finally(() => rcon.list().then(handleOverviewList))
+            .finally(() => rcon.whitelist().then(handleOverviewWhitelist))
+            .catch(() => {}),
+        ])
+      })
     }
 
     impl()
 
-    const interval = setInterval(impl, 999)
+    const interval = setInterval(impl, 1000)
 
     return () => {
+      controller.current.abort()
       clearInterval(interval)
       rcon.$disconnect()
+      promise.current = Promise.resolve()
+      controller.current = new AbortController()
     }
   }, [])
+}
+
+export const Rcon = (props: { children: ReactNode }) => {
+  useRconImpl()
+
+  return props.children
 }
 
 export const handleWhitelistAdd = (player: string) => {
