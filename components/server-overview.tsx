@@ -26,7 +26,10 @@ const ServerOverviewStats = () => {
             numberOfLines={1}
             ellipsizeMode='tail'
           >
-            {isConnected ? 'Connected to' : 'Disconnected from'} {serverHost}:{serverPort}
+            {isConnected ? 'Connected' : 'Disconnected'}{' '}
+            {serverHost &&
+              serverPort &&
+              `${isConnected ? 'to' : 'from'} ${serverHost}:${serverPort}`}
           </Text>
         </View>
 
