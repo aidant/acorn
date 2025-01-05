@@ -48,16 +48,15 @@ export const useRconImpl = () => {
             .finally(() => rcon.whitelist().then(handleOverviewWhitelist))
             .catch(() => {}),
         ])
+          .then(() => new Promise((resolve) => setTimeout(resolve, 1000)))
+          .then(() => impl())
       })
     }
 
     impl()
 
-    const interval = setInterval(impl, 1000)
-
     return () => {
       controller.current.abort()
-      clearInterval(interval)
       rcon.$disconnect()
       promise.current = Promise.resolve()
       controller.current = new AbortController()
